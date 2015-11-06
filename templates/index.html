@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+
+{% block page_content %}
+<div class="page-header">
+    <h2>IPsec VPN Management System</h2>
+</div>
+<pre>
+root@ubuntu:~# ip xfrm state help
+
+Usage: ip xfrm state { add | update } ID [ ALGO-LIST ] [ mode MODE ]
+        [ mark MARK [ mask MASK ] ] [ reqid REQID ] [ seq SEQ ]
+        [ replay-window SIZE ] [ replay-seq SEQ ] [ replay-oseq SEQ ]
+        [ flag FLAG-LIST ] [ sel SELECTOR ] [ LIMIT-LIST ] [ encap ENCAP ]
+        [ coa ADDR[/PLEN] ] [ ctx CTX ] [ extra-flag EXTRA-FLAG-LIST ]
+Usage: ip xfrm state allocspi ID [ mode MODE ] [ mark MARK [ mask MASK ] ]
+        [ reqid REQID ] [ seq SEQ ] [ min SPI max SPI ]
+Usage: ip xfrm state { delete | get } ID [ mark MARK [ mask MASK ] ]
+Usage: ip xfrm state { deleteall | list } [ ID ] [ mode MODE ] [ reqid REQID ]
+        [ flag FLAG-LIST ]
+Usage: ip xfrm state flush [ proto XFRM-PROTO ]
+Usage: ip xfrm state count
+ID := [ src ADDR ] [ dst ADDR ] [ proto XFRM-PROTO ] [ spi SPI ]
+XFRM-PROTO := esp | ah | comp | route2 | hao
+ALGO-LIST := [ ALGO-LIST ] ALGO
+ALGO := { enc | auth } ALGO-NAME ALGO-KEYMAT |
+        auth-trunc ALGO-NAME ALGO-KEYMAT ALGO-TRUNC-LEN |
+        aead ALGO-NAME ALGO-KEYMAT ALGO-ICV-LEN |
+        comp ALGO-NAME
+MODE := transport | tunnel | beet | ro | in_trigger
+FLAG-LIST := [ FLAG-LIST ] FLAG
+FLAG := noecn | decap-dscp | nopmtudisc | wildrecv | icmp | af-unspec | align4
+EXTRA-FLAG-LIST := [ EXTRA-FLAG-LIST ] EXTRA-FLAG
+EXTRA-FLAG := dont-encap-dscp
+SELECTOR := [ src ADDR[/PLEN] ] [ dst ADDR[/PLEN] ] [ dev DEV ] [ UPSPEC ]
+UPSPEC := proto { { tcp | udp | sctp | dccp } [ sport PORT ] [ dport PORT ] |
+                  { icmp | ipv6-icmp | mobility-header } [ type NUMBER ] [ code NUMBER ] |
+                  gre [ key { DOTTED-QUAD | NUMBER } ] | PROTO }
+LIMIT-LIST := [ LIMIT-LIST ] limit LIMIT
+LIMIT := { time-soft | time-hard | time-use-soft | time-use-hard } SECONDS |
+         { byte-soft | byte-hard } SIZE | { packet-soft | packet-hard } COUNT
+ENCAP := { espinudp | espinudp-nonike } SPORT DPORT OADDR
+</pre>
+    <h2>Is it complicated ? </h2>
+{% endblock %}

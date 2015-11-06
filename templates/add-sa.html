@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block page_content %}
+        <form class="form-basic" method="post" action="/add-sa">
+	{% for field in form.errors %}
+		{% for error in form.errors[field] %}
+		    <div class="alert alert-error", style="color:red">
+			    <strong>Error: </strong> {{field}}, {{error}}
+		        </div>
+		{% endfor %}
+	{% endfor %}
+
+	    {{ form.csrf_token }}
+
+            <div class="form-title-row">
+                <h1>ADD IPsec SA</h1>
+            </div>
+{# src/dst addresss #}
+            <div class="form-row">
+                <label>
+                    <span>{{ form.saddr.label }}</span>
+			{{ form.saddr }}
+                </label>
+            </div>
+
+            <div class="form-row">
+                <label>
+                    <span>{{ form.daddr.label }}</span>
+			{{ form.daddr }}
+                </label>
+            </div>
+
+{# protocol/mode/spi params #}
+            <div class="form-row">
+                <label>
+                    <span>{{ form.proto.label }}</span>
+			{{ form.proto }}
+                </label>
+            </div>
+
+            <div class="form-row">
+                <label>
+                    <span>{{ form.mode.label }}</span>
+			{{ form.mode }}
+                </label>
+            </div>
+
+            <div class="form-row">
+                <label>
+                    <span>{{ form.spi.label }}</span>
+			{{ form.spi }}
+                </label>
+            </div>
+
+{# enc/auth alg/key #}
+            <div class="form-row">
+                <label>
+                    <span>{{ form.enc_alg.label }}</span>
+			{{ form.enc_alg }}
+                </label>
+            </div>
+
+            <div class="form-row">
+                <label>
+                    <span>{{ form.enc_key.label }}</span>
+			{{ form.enc_key }}
+                </label>
+            </div>
+
+            <div class="form-row">
+                <label>
+                    <span>{{ form.auth_alg.label }}</span>
+			{{ form.auth_alg }}
+                </label>
+            </div>
+
+            <div class="form-row">
+                <label>
+                    <span>{{ form.auth_key.label }}</span>
+			{{ form.auth_key }}
+                </label>
+            </div>
+
+{# submit button #}
+            <div class="form-row">
+                {{ form.submit }}
+            </div>
+        </form>
+
+{% endblock %}
