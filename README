@@ -1,0 +1,8 @@
+#IPsec VPN Management System
+
+#build
+
+git clone https://github.com/onestraw/flask-ipsecvpn
+cd flask-ipsecvpn
+pip install -r requirements.txt
+python app.py runserver -h <your_ip_address> -p 8080

@@ -44,17 +44,18 @@ spd = []
 @app.route('/dump-sad', methods=['GET', 'POST'])
 def dumpsad():
 	global sad
-	if request.method=='POST':
-		print request.form
-		if'delete' in request.form:
-			for sa in sad:
-				if sa['uuid'] in request.form:
-					xfrm.del_sa(sa)
-			sad = [sa for sa in sad if sa['uuid'] not in request.form]
-		elif 'refresh' in request.form:
-			sad = xfrm.parse_sad()
-		return redirect('/dump-sad')
-	return render_template('dump-sad.html', result = sad)
+	if request.method == 'GET':
+		return render_template('dump-sad.html', result = sad)
+	#if request.method=='POST':
+	print request.form
+	if'delete' in request.form:
+		for sa in sad:
+			if sa['uuid'] in request.form:
+				xfrm.del_sa(sa)
+		sad = [sa for sa in sad if sa['uuid'] not in request.form]
+	elif 'refresh' in request.form:
+		sad = xfrm.parse_sad()
+	return redirect('/dump-sad')
 
 @app.route('/', methods=['GET', 'POST'])
 def index():

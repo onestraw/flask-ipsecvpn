@@ -74,9 +74,7 @@ def parse_sa2dict(xfrm_sa):
 	
 def parse_sad():
 	sad_list = dump_sad()
-	sad_dict_list = []
-	for sa in sad_list:
-		sad_dict_list.append(parse_sa2dict(sa))
+	sad_dict_list = [parse_sa2dict(sa) for sa in sad_list]
 	return sad_dict_list
 
 if __name__ == '__main__':

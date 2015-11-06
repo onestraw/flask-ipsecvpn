@@ -1,5 +1,5 @@
 from flask.ext.wtf import Form
-from wtforms import StringField, SelectField, SubmitField, SelectMultipleField
+from wtforms import StringField, SelectField, SubmitField
 from wtforms.validators import Required
 
 class AddIpsecSaForm(Form):
@@ -20,5 +20,3 @@ class AddIpsecSaForm(Form):
 	auth_key = StringField("authentication key")
     	submit = SubmitField('Submit')
 
-class DelIpsecSaForm(Form):
-	delete = SelectMultipleField('Label', [('1','1'),('2','2')])
