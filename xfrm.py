@@ -2,6 +2,7 @@ import commands
 import re
 import os
 import uuid
+from collections import OrderedDict
 
 '''
 `ip xfrm state ` output format:
@@ -57,7 +58,7 @@ def add_sa(sa):
 	return output
 
 def parse_sa2dict(xfrm_sa):
-	sa = dict()
+	sa = OrderedDict()
 	sa['uuid'] = uuid.uuid4().hex
 	for i in range(len(xfrm_sa)):
 		data = xfrm_sa[i].split(" ")
@@ -76,6 +77,77 @@ def parse_sad():
 	sad_list = dump_sad()
 	sad_dict_list = [parse_sa2dict(sa) for sa in sad_list]
 	return sad_dict_list
+
+'''
+`ip xfrm policy` output format
+src 192.168.200.0/24 dst 192.168.100.0/24 
+	dir out priority 2147481648 
+	tmpl src 10.22.4.204 dst 10.22.4.104
+		proto esp reqid 0 mode tunnel
+src 192.168.100.0/24 dst 192.168.200.0/24 
+	dir fwd priority 2147481648 
+	tmpl src 10.22.4.104 dst 10.22.4.204
+		proto esp reqid 0 mode tunnel
+src 192.168.100.0/24 dst 192.168.200.0/24 
+	dir in priority 2147481648 
+	tmpl src 10.22.4.104 dst 10.22.4.204
+		proto esp reqid 0 mode tunnel
+
+'''
+
+def dump_spd():
+	output = commands.getoutput('ip xfrm policy')
+	output = output.split("\n")
+	spd = []
+	sp = []
+	for i in output:
+		i = i.lstrip()
+		if re.match("src", i):
+			if len(sp) > 0:
+				spd.append(sp)
+			sp = [i]
+		else:
+			sp.append(i)
+	spd.append(sp)
+	return spd
+
+def del_sp(sp):
+	'''
+		ip xfrm policy del src 192.168.200.0/24 dst 192.168.100.0/24 dir in
+	'''
+	cmd = 'ip xfrm policy del src %s dst %s dir %s' %(
+			sp['src'], sp['dst'], sp['dir']) 
+	print cmd
+	output = commands.getoutput(cmd)
+	return output
+
+def add_sp(sp):
+	'''
+		 add src 192.168.200.0/24 dst 192.168.100.0/24 dir in tmpl \
+        	 src 10.22.4.204 dst 10.22.4.104 proto esp mode tunnel priority 2000
+	'''
+	cmd = 'ip xfrm policy add src %s dst %s dir %s tmpl src %s dst %s proto %s mode %s priority %s' %(
+			sp['saddr'], sp['daddr'], sp['dir'], sp['sel-src'], sp['sel-dst'], sp['proto'], sp['mode'], sp['priority']) 
+	print cmd
+	output = commands.getoutput(cmd)
+	return output
+
+def parse_sp2dict(raw_sp):
+	sp = OrderedDict()
+	sp['uuid'] = uuid.uuid4().hex
+	for i in range(len(raw_sp)):
+		data = raw_sp[i].split(" ")
+		if i == 2:
+			sp["selector-"+data[1]] = data[2]
+			sp["selector-"+data[3]] = data[4]
+		else:
+			for j in range(0, len(data)-1, 2):
+				sp[data[j]] = data[j+1]
+	return sp
+
+def parse_spd():
+	spd_list = dump_spd()
+	return [parse_sp2dict(sp) for sp in spd_list]
 
 if __name__ == '__main__':
 	print parse_sad()

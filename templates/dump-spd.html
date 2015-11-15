@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+
+{% block page_content %}
+<div class="page-header">
+    <h2>dump spd</h2>
+</div>
+
+<form  method="post" action="/dump-spd">
+	{% for item in result %}
+	<input type="checkbox" name={{ item['uuid'] }} value="no" /> delete ?  <br/>
+		<table>
+			<tr>
+			{% for key, value in item.iteritems() %}
+	   			<tr>
+			        	<th> {{ key }} </th>
+		        		<td> {{ value }} </td>
+	    			</tr>
+			{% endfor %}
+			</tr>
+		</table>
+
+	<hr>
+   	{% endfor %}
+
+	<div class="form-basic" style="display:inline;">
+        	<input type="submit" name="delete", value="Delete" />
+		<input type="submit" name="refresh", value="Refresh" />
+        </div>
+</form>
+{% endblock %}

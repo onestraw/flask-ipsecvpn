@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block page_content %}
+        <form class="form-basic" method="post" action="/add-sp">
+	{% for field in form.errors %}
+		{% for error in form.errors[field] %}
+		    <div class="alert alert-error", style="color:red">
+			    <strong>Error: </strong> {{field}}, {{error}}
+		        </div>
+		{% endfor %}
+	{% endfor %}
+
+	    {{ form.csrf_token }}
+
+            <div class="form-title-row">
+                <h1>ADD IPsec SP</h1>
+            </div>
+{# src/dst addresss #}
+            <div class="form-row">
+                <label>
+                    <span>{{ form.saddr.label }}</span>
+			{{ form.saddr }}
+                </label>
+            </div>
+
+            <div class="form-row">
+                <label>
+                    <span>{{ form.daddr.label }}</span>
+			{{ form.daddr }}
+                </label>
+            </div>
+
+{# dir / mode/proto/priority params #}
+            <div class="form-row">
+                <label>
+                    <span>{{ form.direction.label }}</span>
+			{{ form.direction }}
+                </label>
+            </div>
+
+            <div class="form-row">
+                <label>
+                    <span>{{ form.mode.label }}</span>
+			{{ form.mode }}
+                </label>
+            </div>
+
+            <div class="form-row">
+                <label>
+                    <span>{{ form.proto.label }}</span>
+			{{ form.proto }}
+                </label>
+            </div>
+
+            <div class="form-row">
+                <label>
+                    <span>{{ form.priority.label }}</span>
+			{{ form.priority }}
+                </label>
+            </div>
+{# selector src/dst #}
+            <div class="form-row">
+                <label>
+                    <span>{{ form.sel_src.label }}</span>
+			{{ form.sel_src }}
+                </label>
+            </div>
+
+            <div class="form-row">
+                <label>
+                    <span>{{ form.sel_dst.label }}</span>
+			{{ form.sel_dst }}
+                </label>
+            </div>
+
+
+{# submit button #}
+            <div class="form-row">
+                {{ form.submit }}
+            </div>
+        </form>
+
+{% endblock %}
