@@ -10,6 +10,9 @@ dist_run:prepare
 prepare:
 	mkdir -p logs/
 
+check:
+	flake8 *.py
+
 venv:
 	virtualenv venv
 
