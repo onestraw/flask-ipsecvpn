@@ -17,6 +17,7 @@ moment = Moment(app)
 
 sad = []
 spd = []
+counter = 0
 
 
 @app.errorhandler(404)
@@ -27,6 +28,41 @@ def page_not_found(e):
 @app.errorhandler(500)
 def internal_server_error(e):
     return render_template('500.html'), 500
+
+
+class Counter(object):
+    _count = 0
+
+    @classmethod
+    def value(cls):
+        return str(cls._count)
+
+    @classmethod
+    def add(cls, n):
+        cls._count += n
+
+
+@app.route('/thread_share_class', methods=['GET', 'POST'])
+def test_thread_share_class():
+    if request.method == 'GET':
+        return Counter.value()
+    elif request.method == 'POST':
+        Counter.add(1)
+        return '', 200
+    else:
+        return '', 405
+
+
+@app.route('/thread_share_global', methods=['GET', 'POST'])
+def test_thread_share_global():
+    global counter
+    if request.method == 'GET':
+        return str(counter)
+    elif request.method == 'POST':
+        counter += 1
+        return '', 200
+    else:
+        return '', 405
 
 
 @app.route('/add-sa', methods=['GET', 'POST'])
