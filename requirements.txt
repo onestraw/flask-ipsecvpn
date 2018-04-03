@@ -12,3 +12,6 @@ dominate==2.1.16
 itsdangerous==0.24
 visitor==0.1.2
 wsgiref==0.1.2
+gevent==1.2.2
+greenlet==0.4.13
+gunicorn==19.7.1
