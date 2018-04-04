@@ -16,15 +16,12 @@ make deps
 make run
 ```
 
-## thread safe testing
+## global var between processes / threads
+[Thread safety](https://en.wikipedia.org/wiki/Thread_safety)
 
-### run with gunicorn
+### run with gunicorn process
 
-    make run
-
-note the pid of access log in this window
-
-### request /thread_share_class and /thread_share_global
+	gunicorn -b "0.0.0.0:8080" -w 2 -k "gevent" "app:app" --access-logfile /dev/stdout
 
     watch curl -X POST http://0.0.0.0:8080/thread_share_global
     Ctrl-C
@@ -32,3 +29,23 @@ note the pid of access log in this window
     watch curl  http://0.0.0.0:8080/thread_share_global
 
 gunicorn 是个pre-fork worker model，类似Nginx，它创建的是进程，不是线程，所以全局变量每个进程各自一份.
+
+### run with gunicorn thread
+
+	gunicorn -b "0.0.0.0:8080" --threads 2 app:app --access-logfile /dev/stdout
+
+    curl -X POST http://0.0.0.0:8080/thread_share_global
+
+    ab -n 320 -c 32  http://0.0.0.0:8080/thread_share_global
+
+并发量小时，基本全由一个线程处理，不进行轮询
+
+### run with uwsgi thread
+
+	uwsgi --http :8080 --processes 1 --threads 2 -w app:app
+
+    curl -X POST http://0.0.0.0:8080/thread_share_global
+
+    watch curl  http://0.0.0.0:8080/thread_share_global
+
+一个进程，两个线程，在上述10r/s速率时，两个线程轮流处理请求

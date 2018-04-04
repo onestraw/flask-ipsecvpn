@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+import os
+import thread
+from functools import wraps
 from flask import Flask, render_template, redirect, flash, request
 from flask.ext.script import Manager
 from flask.ext.bootstrap import Bootstrap
@@ -42,7 +45,16 @@ class Counter(object):
         cls._count += n
 
 
+def log_pid_tid(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        print 'pid: {}, tid: {}'.format(os.getpid(), thread.get_ident())
+        return f(*args, **kwargs)
+    return decorated_function
+
+
 @app.route('/thread_share_class', methods=['GET', 'POST'])
+@log_pid_tid
 def test_thread_share_class():
     if request.method == 'GET':
         return Counter.value()
@@ -54,6 +66,7 @@ def test_thread_share_class():
 
 
 @app.route('/thread_share_global', methods=['GET', 'POST'])
+@log_pid_tid
 def test_thread_share_global():
     global counter
     if request.method == 'GET':
