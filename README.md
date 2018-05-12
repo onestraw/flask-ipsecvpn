@@ -49,3 +49,8 @@ gunicorn 是个pre-fork worker model，类似Nginx，它创建的是进程，不
     watch curl  http://0.0.0.0:8080/thread_share_global
 
 一个进程，两个线程，在上述10r/s速率时，两个线程轮流处理请求
+
+## Play with Nginx and Docker
+
+    docker build -t flask-ipsecvpn  .
+    docker run -p 8081:80 flask-ipsecvpn
