@@ -50,6 +50,13 @@ gunicorn 是个pre-fork worker model，类似Nginx，它创建的是进程，不
 
 一个进程，两个线程，在上述10r/s速率时，两个线程轮流处理请求
 
+## Celery
+
+- start a thread to fetch/crawl info every 10 seconds and put into redis
+- ajax fetch data from backend and update the html
+
+[example](https://github.com/miguelgrinberg/flask-celery-example)
+
 ## Play with Nginx and Docker
 
     docker build -t flask-ipsecvpn  .
